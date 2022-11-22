@@ -1,0 +1,15 @@
+[package]
+name = "wasn"
+version = "0.1.0"
+edition = "2021"
+
+authors = ["Bosswestfalen <bwf_code@outlook.com>"]
+license = "MIT"
+
+description = """
+wasn is a simple command line calculator.
+"""
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
