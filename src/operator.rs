@@ -1,7 +1,7 @@
 //! Supported operators.
 //!
 //! The following operators are supported:
-//! + Add (input: +)
+//! + Add (input: +, plus)
 
 use super::error::Error;
 
@@ -9,6 +9,7 @@ use std::fmt;
 use std::str::FromStr;
 
 /// Enumeration for allowed operators.
+#[derive(Debug, PartialEq)]
 pub enum Operator {
     /// Add = a + b
     Add,
@@ -33,10 +34,10 @@ impl FromStr for Operator {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if s != "+" {
-            return Err(Error::at_operator(s));
+        if ["+", "plus"].contains(&s) {
+            return Ok(Operator::Add);
         }
-        Ok(Operator::Add)
+        Err(Error::at_operator(s))
     }
 }
 
@@ -61,5 +62,13 @@ mod tests {
     fn add_ok() {
         let r = Operator::Add.calc(A, B);
         assert_eq!(r, A + B);
+    }
+
+    #[test]
+    fn parse_add_ok() {
+        for i in ["+", "plus"] {
+            let op: Operator = i.parse().unwrap();
+            assert_eq!(Operator::Add, op);
+        }
     }
 }
