@@ -3,6 +3,8 @@
 //! The following operators are supported:
 //! + Add (input: +)
 
+use super::error::Error;
+
 use std::fmt;
 use std::str::FromStr;
 
@@ -28,9 +30,12 @@ impl Operator {
 }
 
 impl FromStr for Operator {
-    type Err = i32;
+    type Err = Error;
 
-    fn from_str(_s: &str) -> Result<Self, Self::Err> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if s != "+" {
+            return Err(Error::at_operator(s));
+        }
         Ok(Operator::Add)
     }
 }

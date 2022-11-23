@@ -2,11 +2,9 @@ use std::{env, process};
 use std::num::ParseFloatError;
 use std::str::FromStr;
 
-mod operators;
 
 const WRONG_PARAMETER_COUNT: i32 = 1;
 const CANNOT_PARSE_NUMBER: i32 = 2;
-const CANNOT_PARSE_OPERATOR: i32 = 3;
 
 
 fn main() {
@@ -16,6 +14,12 @@ fn main() {
         eprintln!("call {} A op B", args[0]);
         process::exit(WRONG_PARAMETER_COUNT);
     }
+
+    if let Err(e) = run(args) {
+        eprintln!("{}", e);
+        process::exit(e.code());
+    }
+}
 
     //parse input
     //if error: print and exit
@@ -28,7 +32,7 @@ fn main() {
     //  else: parse input
     //  use result as A, and redo loop
 
-
+fn run(args: Vec<String>) -> Result<(), wasn::Error> {
     let Ok(a) = parse_number(&args[1]) else {
         eprintln!("cannot parse number {}", args[1]);
         process::exit(CANNOT_PARSE_NUMBER);
@@ -39,13 +43,16 @@ fn main() {
         process::exit(CANNOT_PARSE_NUMBER);
     };
 
-    let op = wasn::Operator::from_str(&args[2]).unwrap();
+    let op = wasn::Operator::from_str(&args[2])?;
 
     let r = op.calc(a, b);
 
 
     println!("{} {} {} = {}", a, op, b, r);
+
+    Ok(())
 }
+
 
 
 fn parse_number(arg: &str) -> Result<f64, ParseFloatError> {
