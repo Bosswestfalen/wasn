@@ -43,8 +43,7 @@ fn run(args: Vec<String>) -> Result<(), wasn::Error> {
         process::exit(CANNOT_PARSE_NUMBER);
     };
 
-    let op = wasn::Operator::from_str(&args[2])?;
-
+    let op: wasn::Operator = args[2].parse()?;
     let r = op.calc(a, b);
 
 

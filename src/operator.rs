@@ -71,4 +71,12 @@ mod tests {
             assert_eq!(Operator::Add, op);
         }
     }
+
+    #[test]
+    fn parse_fail() {
+        for i in ["-", "*", "/", "cat", "^"] {
+            let f: Result<Operator, Error> = i.parse();
+            assert!(f.is_err());
+        }
+    }
 }
