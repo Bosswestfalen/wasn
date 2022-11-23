@@ -34,18 +34,14 @@ fn main() {
         process::exit(CANNOT_PARSE_NUMBER);
     };
 
-    let Some(op) = operators::parse(&args[2]) else {
-        eprintln!("Cannot parse operator {}",  args[2]);
-        process::exit(CANNOT_PARSE_OPERATOR);
-    };
-
     let Ok(b) = parse_number(&args[3]) else {
         eprintln!("cannot parse number {}", args[3]);
         process::exit(CANNOT_PARSE_NUMBER);
     };
 
-    let e = wasn::Equation::build(a, op, b);
-    let r = e.calc();
+    let op = wasn::Operator::from_str(&args[2]).unwrap();
+
+    let r = op.calc(a, b);
 
 
     println!("{} {} {} = {}", a, op, b, r);
