@@ -76,6 +76,16 @@ impl Rem for Number {
     }
 }
 
+impl Number {
+    /// Calculate A raised by the power of B.
+    ///
+    /// **Note:** no overflow check is performed.
+    pub fn pow(self, e: Self) -> Self {
+        let value = self.value.powf(e.value);
+        Number{value}
+    }
+}
+
 impl fmt::Display for Number {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.value)
@@ -143,5 +153,13 @@ mod tests {
         let b = Number{value: B};
         let r = a % b;
         assert_eq!(r.value, A % B);
+    }
+    
+    #[test]
+    fn test_pow() {
+        let a = Number{value: A};
+        let b = Number{value: B};
+        let r = a.pow(b);
+        assert_eq!(r.value, A.powf(B));
     }
 }
