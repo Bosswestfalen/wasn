@@ -6,7 +6,7 @@
 use super::error::Error;
 
 use std::fmt;
-use std::ops::{Add, Sub, Mul, Div};
+use std::ops::{Add, Sub, Mul, Div, Rem};
 use std::str::FromStr;
 
 /// A number contains its numerical value.
@@ -58,11 +58,20 @@ impl Mul for Number {
     }
 }
 
-impl Div for Number{
+impl Div for Number {
     type Output = Self;
 
     fn div(self, rhs: Self) -> Self::Output {
         let value = self.value / rhs.value;
+        Number{value}
+    }
+}
+
+impl Rem for Number {
+    type Output = Self;
+
+    fn rem(self, rhs: Self) -> Self::Output {
+        let value = self.value % rhs.value;
         Number{value}
     }
 }
@@ -126,5 +135,13 @@ mod tests {
         let b = Number{value: B};
         let r = a / b;
         assert_eq!(r.value, A / B);
+    }
+    
+    #[test]
+    fn test_mod() {
+        let a = Number{value: A};
+        let b = Number{value: B};
+        let r = a % b;
+        assert_eq!(r.value, A % B);
     }
 }

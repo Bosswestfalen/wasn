@@ -5,6 +5,7 @@
 //! + Minus (input: -, minus)
 //! + Mul (input: *, x, times, mal)
 //! + Div (input: /, :, div, durch)
+//! + Mod (input: %, mod, modulo)
 
 use super::error::Error;
 use super::number::Number;
@@ -24,6 +25,8 @@ pub enum Operator {
     Mul,
     /// Div = a / b
     Div,
+    /// Mod = a % b
+    Mod,
 }
 
 impl Operator {
@@ -34,6 +37,7 @@ impl Operator {
             Operator::Minus => a - b,
             Operator::Mul => a * b,
             Operator::Div => a / b,
+            Operator::Mod => a % b,
         }
     }
 }
@@ -54,6 +58,9 @@ impl FromStr for Operator {
         if ["/", ":", "div", "durch"].contains(&s) {
             return Ok(Operator::Div);
         }
+        if ["%", "mod", "modulo"].contains(&s) {
+            return Ok(Operator::Mod);
+        }
         Err(Error::at_operator(s))
     }
 }
@@ -65,6 +72,7 @@ impl fmt::Display for Operator {
             Self::Minus => '-',
             Self::Mul => '*',
             Self::Div => '/',
+            Self::Mod => '%',
         };
         write!(f, "{}", o)
     }
@@ -103,6 +111,12 @@ mod tests {
     }
 
     #[test]
+    fn mod_ok() {
+        let r = Operator::Mod.calc(A, B);
+        assert_eq!(r, A % B);
+    }
+
+    #[test]
     fn parse_add_ok() {
         for i in ["+", "plus"] {
             let op: Operator = i.parse().unwrap();
@@ -131,6 +145,14 @@ mod tests {
         for i in ["/", ":", "div", "durch"] {
             let op: Operator = i.parse().unwrap();
             assert_eq!(Operator::Div, op);
+        }
+    }
+    
+    #[test]
+    fn parse_mod_ok() {
+        for i in ["%", "mod", "modulo"] {
+            let op: Operator = i.parse().unwrap();
+            assert_eq!(Operator::Mod, op);
         }
     }
 
