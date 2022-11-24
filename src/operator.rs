@@ -3,6 +3,7 @@
 //! The following operators are supported:
 //! + Add (input: +, plus)
 //! + Minus (input: -, minus)
+//! + Mul (input: *, x, times, mal)
 
 use super::error::Error;
 use super::number::Number;
@@ -17,7 +18,9 @@ pub enum Operator {
     /// Add = a + b
     Add,
     /// Minus = a - b
-    Minus
+    Minus,
+    /// Mul = a * b
+    Mul,
 }
 
 impl Operator {
@@ -26,6 +29,7 @@ impl Operator {
         match &self {
             Operator::Add => a + b,
             Operator::Minus => a - b,
+            Operator::Mul => a * b,
         }
     }
 }
@@ -40,6 +44,9 @@ impl FromStr for Operator {
         if ["-", "minus"].contains(&s) {
             return Ok(Operator::Minus);
         }
+        if ["*", "x", "times", "mal"].contains(&s) {
+            return Ok(Operator::Mul);
+        }
         Err(Error::at_operator(s))
     }
 }
@@ -49,6 +56,7 @@ impl fmt::Display for Operator {
         let o = match self {
             Self::Add => '+',
             Self::Minus => '-',
+            Self::Mul => '*',
         };
         write!(f, "{}", o)
     }
@@ -75,6 +83,12 @@ mod tests {
     }
 
     #[test]
+    fn mul_ok() {
+        let r = Operator::Mul.calc(A, B);
+        assert_eq!(r, A * B);
+    }
+
+    #[test]
     fn parse_add_ok() {
         for i in ["+", "plus"] {
             let op: Operator = i.parse().unwrap();
@@ -91,8 +105,16 @@ mod tests {
     }
 
     #[test]
+    fn parse_mul_ok() {
+        for i in ["*", "x", "times", "mal"] {
+            let op: Operator = i.parse().unwrap();
+            assert_eq!(Operator::Mul, op);
+        }
+    }
+
+    #[test]
     fn parse_fail() {
-        for i in ["", "*", "/", "cat", "^"] {
+        for i in ["", "/", "cat", "^"] {
             let f: Result<Operator, Error> = i.parse();
             assert!(f.is_err());
         }

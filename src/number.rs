@@ -6,7 +6,7 @@
 use super::error::Error;
 
 use std::fmt;
-use std::ops::{Add, Sub};
+use std::ops::{Add, Sub, Mul};
 use std::str::FromStr;
 
 /// A number contains its numerical value.
@@ -50,6 +50,14 @@ impl Sub for Number {
     }
 }
 
+impl Mul for Number {
+    type Output = Self;
+    fn mul(self, rhs: Self) -> Self::Output {
+        let value = self.value * rhs.value;
+        Number{value}
+    }
+}
+
 impl fmt::Display for Number {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.value)
@@ -76,11 +84,30 @@ mod tests {
         }
     }
 
+    const A: f64 = 10.5;
+    const B: f64 = 3.5;
+
     #[test]
     fn test_add() {
-        let a = Number{value: 1.2};
-        let b = Number{value: 3.8};
+        let a = Number{value: A};
+        let b = Number{value: B};
         let r = a + b;
-        assert_eq!(r.value, 5.0);
+        assert_eq!(r.value, A + B);
+    }
+
+    #[test]
+    fn test_minus() {
+        let a = Number{value: A};
+        let b = Number{value: B};
+        let r = a - b;
+        assert_eq!(r.value, A - B);
+    }
+
+    #[test]
+    fn test_mul() {
+        let a = Number{value: A};
+        let b = Number{value: B};
+        let r = a * b;
+        assert_eq!(r.value, A * B);
     }
 }
