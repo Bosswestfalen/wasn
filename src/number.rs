@@ -5,9 +5,8 @@
 
 use super::error::Error;
 
-//use std::convert::From;
 use std::fmt;
-use std::ops::Add;
+use std::ops::{Add, Sub};
 use std::str::FromStr;
 
 /// A number contains its numerical value.
@@ -39,6 +38,14 @@ impl Add for Number {
 
     fn add(self, rhs: Self) -> Self::Output {
         let value = self.value + rhs.value;
+        Number{value}
+    }
+}
+
+impl Sub for Number {
+    type Output = Self;
+    fn sub(self, rhs: Self) -> Self::Output {
+        let value = self.value - rhs.value;
         Number{value}
     }
 }

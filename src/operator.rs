@@ -2,6 +2,7 @@
 //!
 //! The following operators are supported:
 //! + Add (input: +, plus)
+//! + Minus (input: -, minus)
 
 use super::error::Error;
 use super::number::Number;
@@ -15,6 +16,8 @@ use std::str::FromStr;
 pub enum Operator {
     /// Add = a + b
     Add,
+    /// Minus = a - b
+    Minus
 }
 
 impl Operator {
@@ -22,6 +25,7 @@ impl Operator {
     pub fn calc(&self, a: Number, b: Number) -> Number {
         match &self {
             Operator::Add => a + b,
+            Operator::Minus => a - b,
         }
     }
 }
@@ -33,6 +37,9 @@ impl FromStr for Operator {
         if ["+", "plus"].contains(&s) {
             return Ok(Operator::Add);
         }
+        if ["-", "minus"].contains(&s) {
+            return Ok(Operator::Minus);
+        }
         Err(Error::at_operator(s))
     }
 }
@@ -41,6 +48,7 @@ impl fmt::Display for Operator {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let o = match self {
             Self::Add => '+',
+            Self::Minus => '-',
         };
         write!(f, "{}", o)
     }
@@ -61,18 +69,30 @@ mod tests {
     }
 
     #[test]
+    fn minus_ok() {
+        let r = Operator::Minus.calc(A, B);
+        assert_eq!(r, A - B);
+    }
+
+    #[test]
     fn parse_add_ok() {
         for i in ["+", "plus"] {
             let op: Operator = i.parse().unwrap();
             assert_eq!(Operator::Add, op);
         }
+    }
 
-        crate::number::tests::parse_ok();
+    #[test]
+    fn parse_minus_ok() {
+        for i in ["-", "minus"] {
+            let op: Operator = i.parse().unwrap();
+            assert_eq!(Operator::Minus, op);
+        }
     }
 
     #[test]
     fn parse_fail() {
-        for i in ["-", "*", "/", "cat", "^"] {
+        for i in ["", "*", "/", "cat", "^"] {
             let f: Result<Operator, Error> = i.parse();
             assert!(f.is_err());
         }
