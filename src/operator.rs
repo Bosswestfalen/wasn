@@ -4,6 +4,7 @@
 //! + Add (input: +, plus)
 //! + Minus (input: -, minus)
 //! + Mul (input: *, x, times, mal)
+//! + Div (input: /, :, div, durch)
 
 use super::error::Error;
 use super::number::Number;
@@ -21,6 +22,8 @@ pub enum Operator {
     Minus,
     /// Mul = a * b
     Mul,
+    /// Div = a / b
+    Div,
 }
 
 impl Operator {
@@ -30,6 +33,7 @@ impl Operator {
             Operator::Add => a + b,
             Operator::Minus => a - b,
             Operator::Mul => a * b,
+            Operator::Div => a / b,
         }
     }
 }
@@ -47,6 +51,9 @@ impl FromStr for Operator {
         if ["*", "x", "times", "mal"].contains(&s) {
             return Ok(Operator::Mul);
         }
+        if ["/", ":", "div", "durch"].contains(&s) {
+            return Ok(Operator::Div);
+        }
         Err(Error::at_operator(s))
     }
 }
@@ -57,6 +64,7 @@ impl fmt::Display for Operator {
             Self::Add => '+',
             Self::Minus => '-',
             Self::Mul => '*',
+            Self::Div => '/',
         };
         write!(f, "{}", o)
     }
@@ -89,6 +97,12 @@ mod tests {
     }
 
     #[test]
+    fn div_ok() {
+        let r = Operator::Div.calc(A, B);
+        assert_eq!(r, A / B);
+    }
+
+    #[test]
     fn parse_add_ok() {
         for i in ["+", "plus"] {
             let op: Operator = i.parse().unwrap();
@@ -113,8 +127,16 @@ mod tests {
     }
 
     #[test]
+    fn parse_div_ok() {
+        for i in ["/", ":", "div", "durch"] {
+            let op: Operator = i.parse().unwrap();
+            assert_eq!(Operator::Div, op);
+        }
+    }
+
+    #[test]
     fn parse_fail() {
-        for i in ["", "/", "cat", "^"] {
+        for i in ["", "cat", "^"] {
             let f: Result<Operator, Error> = i.parse();
             assert!(f.is_err());
         }

@@ -6,7 +6,7 @@
 use super::error::Error;
 
 use std::fmt;
-use std::ops::{Add, Sub, Mul};
+use std::ops::{Add, Sub, Mul, Div};
 use std::str::FromStr;
 
 /// A number contains its numerical value.
@@ -18,8 +18,6 @@ pub struct Number {
     #[cfg(not(test))] //better way?
     value: f64,
 }
-
-// implement fmt, implement parse, impl add
 
 impl FromStr for Number {
     type Err = Error;
@@ -44,6 +42,7 @@ impl Add for Number {
 
 impl Sub for Number {
     type Output = Self;
+
     fn sub(self, rhs: Self) -> Self::Output {
         let value = self.value - rhs.value;
         Number{value}
@@ -52,8 +51,18 @@ impl Sub for Number {
 
 impl Mul for Number {
     type Output = Self;
+
     fn mul(self, rhs: Self) -> Self::Output {
         let value = self.value * rhs.value;
+        Number{value}
+    }
+}
+
+impl Div for Number{
+    type Output = Self;
+
+    fn div(self, rhs: Self) -> Self::Output {
+        let value = self.value / rhs.value;
         Number{value}
     }
 }
@@ -109,5 +118,13 @@ mod tests {
         let b = Number{value: B};
         let r = a * b;
         assert_eq!(r.value, A * B);
+    }
+    
+    #[test]
+    fn test_div() {
+        let a = Number{value: A};
+        let b = Number{value: B};
+        let r = a / b;
+        assert_eq!(r.value, A / B);
     }
 }
