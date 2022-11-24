@@ -1,7 +1,7 @@
-pub mod operator;
 pub mod error;
+pub mod number;
+pub mod operator;
 
-pub use operator::Operator;
 pub use error::Error;
-
-
+pub use number::Number;
+pub use operator::Operator;

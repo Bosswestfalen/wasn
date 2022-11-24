@@ -4,12 +4,14 @@
 //! + Add (input: +, plus)
 
 use super::error::Error;
+use super::number::Number;
 
 use std::fmt;
 use std::str::FromStr;
 
+
 /// Enumeration for allowed operators.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Operator {
     /// Add = a + b
     Add,
@@ -17,13 +19,7 @@ pub enum Operator {
 
 impl Operator {
     /// Calculate the result based on the operator.
-    ///
-    /// ```
-    /// let add = wasn::Operator::Add;
-    /// let r = add.calc(1.0, 2.5);
-    /// assert_eq!(3.5, r);
-    /// ```
-    pub fn calc(&self, a: f64, b: f64) -> f64 {
+    pub fn calc(&self, a: Number, b: Number) -> Number {
         match &self {
             Operator::Add => a + b,
         }
@@ -50,13 +46,13 @@ impl fmt::Display for Operator {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
-        
-    const A: f64 = 5.0;
-    const B: f64 = 10.0;
+
+    const A: Number = Number{value: 5.0};
+    const B: Number = Number{value: 10.0};
+
 
     #[test]
     fn add_ok() {
@@ -70,6 +66,8 @@ mod tests {
             let op: Operator = i.parse().unwrap();
             assert_eq!(Operator::Add, op);
         }
+
+        crate::number::tests::parse_ok();
     }
 
     #[test]
