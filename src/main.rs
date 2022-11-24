@@ -1,6 +1,5 @@
 use std::{env, process};
 
-
 fn main() {
     const REQUIRED_ARGS: usize = 4;
     let args: Vec<String> = env::args().collect();
@@ -11,21 +10,17 @@ fn main() {
     }
 
     if let Err(e) = run(args) {
-        eprintln!("{}", e);
-        process::exit(e.code());
+        eprintln!("Error: {}", e);
+
+        use wasn::ErrorCode;
+        let exit = match e.code() {
+            ErrorCode::CannotParseOperator => 2,
+            ErrorCode::CannotParseNumber => 3,
+        };
+
+        process::exit(exit);
     }
 }
-
-//parse input
-//if error: print and exit
-
-//loop
-//  calculate
-//  print
-//  read input
-//  if input empty: exit
-//  else: parse input
-//  use result as A, and redo loop
 
 fn run(args: Vec<String>) -> Result<(), wasn::Error> {
     use wasn::Number;

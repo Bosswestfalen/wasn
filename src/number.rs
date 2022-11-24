@@ -6,7 +6,7 @@
 use super::error::Error;
 
 use std::fmt;
-use std::ops::{Add, Sub, Mul, Div, Rem};
+use std::ops::{Add, Div, Mul, Rem, Sub};
 use std::str::FromStr;
 
 /// A number contains its numerical value.
@@ -27,7 +27,7 @@ impl FromStr for Number {
             return Err(Error::at_number(s));
         };
 
-        Ok(Number{value})
+        Ok(Number { value })
     }
 }
 
@@ -36,7 +36,7 @@ impl Add for Number {
 
     fn add(self, rhs: Self) -> Self::Output {
         let value = self.value + rhs.value;
-        Number{value}
+        Number { value }
     }
 }
 
@@ -45,7 +45,7 @@ impl Sub for Number {
 
     fn sub(self, rhs: Self) -> Self::Output {
         let value = self.value - rhs.value;
-        Number{value}
+        Number { value }
     }
 }
 
@@ -54,7 +54,7 @@ impl Mul for Number {
 
     fn mul(self, rhs: Self) -> Self::Output {
         let value = self.value * rhs.value;
-        Number{value}
+        Number { value }
     }
 }
 
@@ -63,7 +63,7 @@ impl Div for Number {
 
     fn div(self, rhs: Self) -> Self::Output {
         let value = self.value / rhs.value;
-        Number{value}
+        Number { value }
     }
 }
 
@@ -72,7 +72,7 @@ impl Rem for Number {
 
     fn rem(self, rhs: Self) -> Self::Output {
         let value = self.value % rhs.value;
-        Number{value}
+        Number { value }
     }
 }
 
@@ -82,7 +82,7 @@ impl Number {
     /// **Note:** no overflow check is performed.
     pub fn pow(self, e: Self) -> Self {
         let value = self.value.powf(e.value);
-        Number{value}
+        Number { value }
     }
 }
 
@@ -91,7 +91,6 @@ impl fmt::Display for Number {
         write!(f, "{}", self.value)
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -117,48 +116,48 @@ mod tests {
 
     #[test]
     fn test_add() {
-        let a = Number{value: A};
-        let b = Number{value: B};
+        let a = Number { value: A };
+        let b = Number { value: B };
         let r = a + b;
         assert_eq!(r.value, A + B);
     }
 
     #[test]
     fn test_minus() {
-        let a = Number{value: A};
-        let b = Number{value: B};
+        let a = Number { value: A };
+        let b = Number { value: B };
         let r = a - b;
         assert_eq!(r.value, A - B);
     }
 
     #[test]
     fn test_mul() {
-        let a = Number{value: A};
-        let b = Number{value: B};
+        let a = Number { value: A };
+        let b = Number { value: B };
         let r = a * b;
         assert_eq!(r.value, A * B);
     }
-    
+
     #[test]
     fn test_div() {
-        let a = Number{value: A};
-        let b = Number{value: B};
+        let a = Number { value: A };
+        let b = Number { value: B };
         let r = a / b;
         assert_eq!(r.value, A / B);
     }
-    
+
     #[test]
     fn test_mod() {
-        let a = Number{value: A};
-        let b = Number{value: B};
+        let a = Number { value: A };
+        let b = Number { value: B };
         let r = a % b;
         assert_eq!(r.value, A % B);
     }
-    
+
     #[test]
     fn test_pow() {
-        let a = Number{value: A};
-        let b = Number{value: B};
+        let a = Number { value: A };
+        let b = Number { value: B };
         let r = a.pow(b);
         assert_eq!(r.value, A.powf(B));
     }

@@ -4,37 +4,47 @@
 
 use std::fmt;
 
-const CANNOT_PARSE_NUMBER: i32 = 2;
-const CANNOT_PARSE_OPERATOR: i32 = 3;
+/// Possible causes of an Error.
+#[derive(Clone, Debug, Copy)]
+pub enum ErrorCode {
+    /// number cannot be parsed
+    CannotParseNumber,
+
+    /// operator cannot be parsed
+    CannotParseOperator,
+}
 
 /// The Error used in wasn.
 ///
-/// An Error can occur if a number or an operator cannot be parsed.
+/// See ErrorCodes for possible reasons.
 #[derive(Debug, Clone)]
 pub struct Error {
     /// Message of the error
     message: String,
-    /// Error code, can be used as exit code.
-    code: i32,
+    /// Identifies the cause of the error.
+    ec: ErrorCode,
 }
 
 impl Error {
+    /// Generates a new Error when a number cannot be parsed.
     pub fn at_number(num: &str) -> Self {
         Error {
             message: format!("unable to parse number: {}", num),
-            code: CANNOT_PARSE_NUMBER,
+            ec: ErrorCode::CannotParseNumber,
         }
     }
 
+    /// Generates a new Error when the operator cannot be parsed.
     pub fn at_operator(op: &str) -> Self {
         Error {
             message: format!("unable to parse operator: {}", op),
-            code: CANNOT_PARSE_OPERATOR,
+            ec: ErrorCode::CannotParseOperator,
         }
     }
 
-    pub fn code(&self) -> i32 {
-        self.code
+    /// Get the error code.
+    pub fn code(&self) -> ErrorCode {
+        self.ec
     }
 }
 
@@ -42,6 +52,6 @@ impl std::error::Error for Error {}
 
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> fmt::Result {
-        write!(f, "[code {}] {}", self.code, self.message)
+        write!(f, "{}", self.message)
     }
 }

@@ -14,7 +14,6 @@ use super::number::Number;
 use std::fmt;
 use std::str::FromStr;
 
-
 /// Enumeration for allowed operators.
 #[derive(Debug, PartialEq, Eq)]
 pub enum Operator {
@@ -90,9 +89,8 @@ impl fmt::Display for Operator {
 mod tests {
     use super::*;
 
-    const A: Number = Number{value: 5.0};
-    const B: Number = Number{value: 10.0};
-
+    const A: Number = Number { value: 5.0 };
+    const B: Number = Number { value: 10.0 };
 
     #[test]
     fn add_ok() {
@@ -161,7 +159,7 @@ mod tests {
             assert_eq!(Operator::Div, op);
         }
     }
-    
+
     #[test]
     fn parse_mod_ok() {
         for i in ["%", "mod", "modulo"] {
@@ -169,7 +167,7 @@ mod tests {
             assert_eq!(Operator::Mod, op);
         }
     }
-    
+
     #[test]
     fn parse_pow_ok() {
         for i in ["^", "**", "pow", "hoch"] {
