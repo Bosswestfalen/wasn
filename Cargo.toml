@@ -5,6 +5,7 @@ edition = "2021"
 
 authors = ["Bosswestfalen <bwf_code@outlook.com>"]
 license = "MIT"
+readme = "README.MD"
 
 description = """
 wasn is a simple command line calculator.

@@ -9,7 +9,6 @@
 //! + Pow (input: ^, **, pow, hoch)
 
 use super::error::Error;
-use super::number::Number;
 
 use std::fmt;
 use std::str::FromStr;
@@ -33,14 +32,14 @@ pub enum Operator {
 
 impl Operator {
     /// Calculate the result based on the operator.
-    pub fn calc(&self, a: Number, b: Number) -> Number {
+    pub fn calc(&self, a: f64, b: f64) -> f64 {
         match &self {
             Operator::Add => a + b,
             Operator::Minus => a - b,
             Operator::Mul => a * b,
             Operator::Div => a / b,
             Operator::Mod => a % b,
-            Operator::Pow => a.pow(b),
+            Operator::Pow => a.powf(b),
         }
     }
 }
@@ -89,8 +88,8 @@ impl fmt::Display for Operator {
 mod tests {
     use super::*;
 
-    const A: Number = Number { value: 5.0 };
-    const B: Number = Number { value: 10.0 };
+    const A: f64 = 5.0;
+    const B: f64 = 10.0;
 
     #[test]
     fn add_ok() {
@@ -125,7 +124,7 @@ mod tests {
     #[test]
     fn pow_ok() {
         let r = Operator::Pow.calc(A, B);
-        assert_eq!(r, A.pow(B));
+        assert_eq!(r, A.powf(B));
     }
 
     #[test]
